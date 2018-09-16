@@ -38,6 +38,7 @@ USER_AGENTS = [
 class BaseAPI:
 
     def __init__(self) -> None:
+        self.url = None
         self._loop = asyncio.get_event_loop()
         self._base_url = 'https://www.gramedia.com/api'
 
@@ -68,7 +69,7 @@ class ProductAPI(BaseAPI):
 
     def __init__(self) -> None:
         super(ProductAPI, self).__init__()
-        self.url = f'{self.base_url}/products/'
+        self.url = f'{self._base_url}/products/'
 
     def retrieve(self,
                  category: Optional[Union[List[str], str]] = None,
