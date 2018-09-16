@@ -3,7 +3,11 @@ from setuptools import find_packages
 
 setup(
     name='pygramedia',
+<<<<<<< HEAD
     version='0.0.1rc1',
+=======
+    version='0.0.1',
+>>>>>>> 97311f7... Add setup script to pypi
     packages=['pygramed'],
     license='MIT',
     long_description='Unofficial API wrapper for Gramedia, the biggest bookstore in Indonesia and based on coroutine python 3.',
