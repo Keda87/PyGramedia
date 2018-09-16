@@ -1,4 +1,5 @@
 # PyGramedia
+[![Build Status](https://travis-ci.org/Keda87/PyGramedia.svg?branch=master)](https://travis-ci.org/Keda87/PyGramedia)
 Unofficial API wrapper for [Gramedia](https://www.gramedia.com/), the biggest bookstore in Indonesia and based on coroutine python 3.
 
 #### Usage:
