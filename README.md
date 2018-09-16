@@ -3,6 +3,12 @@
 
 Unofficial API wrapper for [Gramedia](https://www.gramedia.com/), the biggest bookstore in Indonesia and based on coroutine python 3.
 
+#### Requirement: 
+- Python 3.6 and above.
+
+#### Installation:
+    pip install pygramedia
+
 #### Usage:
 
 ```python
@@ -22,10 +28,3 @@ print(loop.run_until_complete(coro))
 # Sync mode like general function.
 print(obj.product.retrieve(limit=10, sync=True))
 ```
-
-#### TODO:
-- [x] Product API
-- [x] Category API
-- [ ] Adding test
-- [ ] TravisCI
-- [ ] Setup script
