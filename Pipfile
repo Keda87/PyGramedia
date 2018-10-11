@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 aiohttp = "==3.4.4"
+coverage = "*"
+aioresponses = "*"
 
 [dev-packages]
 ipython = "*"
