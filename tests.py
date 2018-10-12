@@ -19,7 +19,7 @@ class PyGramediaTest(unittest.TestCase):
 
     @aioresponses()
     def test_product_retrieve_detail(self, mocked=None):
-        expected = {
+        expected = [{
             "name": "Perpajakan Bendahara Desa",
             "authors": [
                 {
@@ -35,11 +35,11 @@ class PyGramediaTest(unittest.TestCase):
             ],
             "thumbnail": "https://cdn.gramedia.com/uploads/items/9789790625433_perpajakan-bendahara-desa.jpg",
             "href": "https://www.gramedia.com/api/products/perpajakan-bendahara-desa/",
-        }
+        }]
         loop = asyncio.get_event_loop()
-        mocked.get('https://www.gramedia.com/api/products/?per_page=1', payload=dict(**expected))
+        mocked.get('https://www.gramedia.com/api/products/?per_page=1', payload=list(expected))
         resp = loop.run_until_complete(self.pg.product.retrieve(limit=1))
-        self.assertIn('perpajakan-bendahara-desa', resp['href'])
+        self.assertIn('perpajakan-bendahara-desa', resp[0]['href'])
 
 
 if __name__ == '__main__':
