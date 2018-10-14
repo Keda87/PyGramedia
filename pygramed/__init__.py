@@ -2,7 +2,8 @@ import asyncio
 import random
 import urllib
 from typing import List, Optional, Union
-
+import types
+from pygramed.models import Product
 from aiohttp import ClientSession
 
 # Reference: https://github.com/tamimibrahim17/List-of-user-agents
@@ -53,7 +54,8 @@ class BaseAPI:
         header = {"User:Agent": random.choice(USER_AGENTS)}
         async with ClientSession() as session:
             async with session.get(url=url, headers=header) as response:
-                return await response.json(encoding='utf8')
+                res = await response.json(encoding='utf-8')
+                return [Product.create_from_json(x) for x in res]
 
     async def _post(self, url: str, data: dict):
         header = {"User:Agent": random.choice(USER_AGENTS)}
@@ -72,6 +74,16 @@ class ProductAPI(BaseAPI):
         self.url = f'{self._base_url}/products/'
 
     def retrieve(self,
+                 category: Optional[Union[List[str], str]] = None,
+                 limit: Optional[int] = None) -> List[Product]:
+        return self._retrieve(category, limit, True)
+
+    def retrieve_async(self,
+                       category: Optional[Union[List[str], str]] = None,
+                       limit: Optional[int] = None) -> types.CoroutineType:
+        return self._retrieve(category, limit, False)
+
+    def _retrieve(self,
                  category: Optional[Union[List[str], str]] = None,
                  limit: Optional[int] = None,
                  sync: bool = False):
