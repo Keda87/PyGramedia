@@ -38,8 +38,31 @@ class PyGramediaTest(unittest.TestCase):
         }]
         loop = asyncio.get_event_loop()
         mocked.get('https://www.gramedia.com/api/products/?per_page=1', payload=list(expected))
-        resp = loop.run_until_complete(self.pg.product.retrieve(limit=1))
-        self.assertIn('perpajakan-bendahara-desa', resp[0]['href'])
+        resp = loop.run_until_complete(self.pg.product.retrieve_async(limit=1))
+        self.assertIn('perpajakan-bendahara-desa', resp[0].href)
+
+    @aioresponses()
+    def test_product_retrieve_detail_sync(self, mocked=None):
+        expected = [{
+            "name": "Perpajakan Bendahara Desa",
+            "authors": [
+                {
+                    "title": "M.bahrun Nawawi",
+                    "href": "https://www.gramedia.com/api/authors/author-mbahrun-nawawi/"
+                }
+            ],
+            "formats": [
+                {
+                    "name": "Perpajakan Bendahara Desa",
+                    "title": "Soft Cover",
+                }
+            ],
+            "thumbnail": "https://cdn.gramedia.com/uploads/items/9789790625433_perpajakan-bendahara-desa.jpg",
+            "href": "https://www.gramedia.com/api/products/perpajakan-bendahara-desa/",
+        }]
+        mocked.get('https://www.gramedia.com/api/products/?per_page=1', payload=list(expected))
+        resp = self.pg.product.retrieve(limit=1)
+        self.assertIn('perpajakan-bendahara-desa', resp[0].href)
 
 
 if __name__ == '__main__':
