@@ -1,0 +1,2 @@
+[run]
+include = pygramed/__init__.py
