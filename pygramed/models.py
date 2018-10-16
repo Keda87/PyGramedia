@@ -1,5 +1,7 @@
 from decimal import Decimal as D
 
+from dateutil.parser import parse
+
 
 class GramediaObject(object):
     def __init__(self, href: str = "", title: str = ""):
@@ -100,12 +102,12 @@ class Format(GramediaObject):
             is_allow_insurance=data.get("isAllowInsurance", False),
             is_extra_packing=data.get("isExtraPacking", False),
             name=data.get("name", None),
-            pre_order_end=data.get("preOrderEnd", None),  # TODO datetime?
-            pre_order_start=data.get("preOrderStart", None),  # TODO datetime?
-            promo_id=data.get("promoId", None),
+            pre_order_end=parse(data.get("preOrderEnd")) if data.get("preOrderEnd") else None,
+            pre_order_start=parse(data.get("preOrderStart")) if data.get("preOrderEnd") else None,
+            promo_id=data.get("promoId", ""),
             promo_percentage=D(str(data.get("promoPercentage"))) if data.get("promoPercentage") else None,
             promo_price=D(str(data.get("promoPrice"))) if data.get("promoPrice") else None,
-            publish_date=data.get("publishDate", None),  # TODO datetime?
+            publish_date=parse(data.get("publishDate")) if data.get("publishDate") else None,
             rel=data.get("rel", None),
             sales_end=data.get("salesEnd", None),
             sales_start=data.get("salesStart", None),
