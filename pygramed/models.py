@@ -39,6 +39,14 @@ class Shipping(object):
         )
 
 
+class Image(object):
+    def __init__(self, href: str = ""):
+        self.href = href
+
+    def __str__(self):
+        return self.href
+
+
 class Variant(object):
     def __init__(self, warna_tinta: str = ""):
         self.warna_tinta = warna_tinta
@@ -51,10 +59,10 @@ class Variant(object):
 
 
 class Format(GramediaObject):
-    def __init__(self, base_price: str = "", href: str = "", images: str = "", is_allow_insurance: str = "",
+    def __init__(self, base_price: str = "", href: str = "", images: [Image] = list(), is_allow_insurance: str = "",
                  is_extra_packing: str = "", name: str = "", pre_order_end: str = "", pre_order_start: str = "",
                  promo_id: str = "", promo_percentage: str = "", promo_price: str = "", publish_date: str = "",
-                 rel: str = "", sales_end: str = "", sales_start: str = "", shipping: [Shipping] = list(),
+                 rel: str = "", sales_end: str = "", sales_start: str = "", shipping: Shipping = Shipping(),
                  sku: str = "",
                  stock_level: int = 0, title: str = "", type: str = "", variant: Variant = None, version: str = "",
                  weight: str = ""):
@@ -83,35 +91,32 @@ class Format(GramediaObject):
 
     @classmethod
     def create_from_json(cls, data):
-        shipping_data = [x for x in data.get('shipping', [])]
-        shipping = [Shipping.create_from_json(x) for x in shipping_data]
-
-        variants_data = data.get('variants', {})
-        variants = Variant.create_from_json(variants_data)
+        shipping = Shipping.create_from_json(data.get('shipping', {}))
+        variant = Variant.create_from_json(data.get('variants', {}))
         return cls(
             base_price=D(str(data.get("basePrice"))) if data.get("basePrice") else None,
-            href=data.get("href", ""),
-            images=data.get("images", []),  # TODO
+            href=data.get("href", None),
+            images=[Image(i) for i in data.get("images", [])],
             is_allow_insurance=data.get("isAllowInsurance", False),
             is_extra_packing=data.get("isExtraPacking", False),
-            name=data.get("name", ""),
-            pre_order_end=data.get("preOrderEnd", ""),  # TODO datetime?
-            pre_order_start=data.get("preOrderStart", ""),  # TODO datetime?
-            promo_id=data.get("promoId", ""),
+            name=data.get("name", None),
+            pre_order_end=data.get("preOrderEnd", None),  # TODO datetime?
+            pre_order_start=data.get("preOrderStart", None),  # TODO datetime?
+            promo_id=data.get("promoId", None),
             promo_percentage=D(str(data.get("promoPercentage"))) if data.get("promoPercentage") else None,
             promo_price=D(str(data.get("promoPrice"))) if data.get("promoPrice") else None,
-            publish_date=data.get("publishDate", ""),  # TODO datetime?
-            rel=data.get("rel", ""),
-            sales_end=data.get("salesEnd", ""),
-            sales_start=data.get("salesStart", ""),
+            publish_date=data.get("publishDate", None),  # TODO datetime?
+            rel=data.get("rel", None),
+            sales_end=data.get("salesEnd", None),
+            sales_start=data.get("salesStart", None),
             shipping=shipping,
-            sku=data.get("sku", ""),
+            sku=data.get("sku", None),
             stock_level=int(data.get("stockLevel", 0)),
-            title=data.get("title", ""),
-            type=data.get("type", ""),
-            variant=variants,
-            version=data.get("version", ""),
-            weight=data.get("weight", "")
+            title=data.get("title", None),
+            type=data.get("type", None),
+            variant=variant,
+            version=data.get("version", None),
+            weight=data.get("weight", None)
         )
 
 
@@ -132,12 +137,9 @@ class Product(object):
 
     @classmethod
     def create_from_json(cls, data):
-        authors_data = [x for x in data.get('authors')]
-        authors = [Author.create_from_json(x) for x in authors_data]
-        categories_data = [x for x in data.get('authors')]
-        categories = [Category.create_from_json(x) for x in categories_data]
-        formats_data = [x for x in data.get('authors')]
-        formats = [Format.create_from_json(x) for x in formats_data]
+        authors = [Author.create_from_json(x) for x in data.get('authors', [])]
+        categories = [Category.create_from_json(x) for x in data.get('categories', [])]
+        formats = [Format.create_from_json(x) for x in data.get('formats', [])]
         return cls(
             authors=authors,
             categories=categories,
