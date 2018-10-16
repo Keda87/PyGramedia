@@ -18,7 +18,7 @@ class PyGramediaTest(unittest.TestCase):
         self.assertEqual(str(self.pg.category), '<CategoryAPI: https://www.gramedia.com/api/categories/>')
 
     @aioresponses()
-    def test_product_retrieve_detail(self, mocked=None):
+    def test_product_retrieve_detail_async(self, mocked=None):
         expected = [{
             "name": "Perpajakan Bendahara Desa",
             "authors": [
@@ -42,7 +42,7 @@ class PyGramediaTest(unittest.TestCase):
         self.assertIn('perpajakan-bendahara-desa', resp[0].href)
 
     @aioresponses()
-    def test_product_retrieve_detail_sync(self, mocked=None):
+    def test_product_retrieve_detail(self, mocked=None):
         expected = [{
             "name": "Perpajakan Bendahara Desa",
             "authors": [
@@ -55,6 +55,10 @@ class PyGramediaTest(unittest.TestCase):
                 {
                     "name": "Perpajakan Bendahara Desa",
                     "title": "Soft Cover",
+                    "images": [
+                        "https://cdn.gramedia.com/uploads/images/207998594_STANDARD-BLIVE-NO.jpg",
+                        "https://cdn.gramedia.com/uploads/images/207998594_2_STANDARD-BLIVE-.jpg"
+                    ],
                 }
             ],
             "thumbnail": "https://cdn.gramedia.com/uploads/items/9789790625433_perpajakan-bendahara-desa.jpg",
@@ -63,6 +67,8 @@ class PyGramediaTest(unittest.TestCase):
         mocked.get('https://www.gramedia.com/api/products/?per_page=1', payload=list(expected))
         resp = self.pg.product.retrieve(limit=1)
         self.assertIn('perpajakan-bendahara-desa', resp[0].href)
+        self.assertEqual(str(resp[0].formats[0].images[0]),
+                         "https://cdn.gramedia.com/uploads/images/207998594_STANDARD-BLIVE-NO.jpg")
 
 
 if __name__ == '__main__':
