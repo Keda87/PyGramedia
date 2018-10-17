@@ -19,13 +19,13 @@ from pygramed import PyGramedia
 obj = PyGramedia()
 
 # Async mode based on coroutine.
-coro = obj.product.retrieve()
-coro = obj.product.retrieve(limit=5)
-coro = obj.product.retrieve(limit=10, category='keluarga')
+coro = obj.product.retrieve_async()
+coro = obj.product.retrieve_async(limit=5)
+coro = obj.product.retrieve_async(limit=10, category='keluarga')
 
 loop = asyncio.get_event_loop()
 print(loop.run_until_complete(coro))
 
 # Sync mode like general function.
-print(obj.product.retrieve(limit=10, sync=True))
+print(obj.product.retrieve(limit=10))
 ```

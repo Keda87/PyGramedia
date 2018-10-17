@@ -4,6 +4,7 @@ from dateutil.parser import parse
 
 
 class GramediaObject(object):
+
     def __init__(self, href: str = "", title: str = ""):
         self.href = href
         self.title = title
@@ -25,6 +26,7 @@ class Category(GramediaObject):
 
 
 class Shipping(object):
+
     def __init__(self, width: str = "", height: str = "", length: str = "", weight: str = ""):
         self.width = width
         self.height = height
@@ -40,8 +42,16 @@ class Shipping(object):
             weight=data.get("weight", None)
         )
 
+    def __repr__(self):
+        return (f'<{self.__class__.__name__}: '
+                f'width={self.width} '
+                f'height={self.height} '
+                f'length={self.length} '
+                f'weight={self.weight}>')
+
 
 class Image(object):
+
     def __init__(self, href: str = ""):
         self.href = href
 
@@ -50,6 +60,7 @@ class Image(object):
 
 
 class Variant(object):
+
     def __init__(self, warna_tinta: str = ""):
         self.warna_tinta = warna_tinta
 
@@ -59,8 +70,12 @@ class Variant(object):
             warna_tinta=data.get("Warna Tinta", None)
         )
 
+    def __repr__(self):
+        return f'<{self.__class__.__name__}: {self.warna_tinta}>'
+
 
 class Format(GramediaObject):
+
     def __init__(self, base_price: str = "", href: str = "", images: [Image] = list(), is_allow_insurance: str = "",
                  is_extra_packing: str = "", name: str = "", pre_order_end: str = "", pre_order_start: str = "",
                  promo_id: str = "", promo_percentage: str = "", promo_price: str = "", publish_date: str = "",
@@ -121,6 +136,9 @@ class Format(GramediaObject):
             weight=data.get("weight", None)
         )
 
+    def __repr__(self):
+        return f'<{self.__class__.__name__}: {self.name}>'
+
 
 class Product(object):
 
@@ -154,3 +172,6 @@ class Product(object):
             tags=data.get("tags", None),
             thumbnail=data.get("thumbnail", None)
         )
+
+    def __repr__(self):
+        return f'<{self.__class__.__name__}: {self.name}>'

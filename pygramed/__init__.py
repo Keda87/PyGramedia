@@ -1,10 +1,12 @@
 import asyncio
 import random
-import urllib
-from typing import List, Optional, Union
 import types
-from pygramed.models import Product
+import urllib
+from typing import List, Optional, Union, Awaitable
+
 from aiohttp import ClientSession
+
+from pygramed.models import Product
 
 # Reference: https://github.com/tamimibrahim17/List-of-user-agents
 USER_AGENTS = [
@@ -44,12 +46,12 @@ class BaseAPI:
         self._base_url = 'https://www.gramedia.com/api'
 
     @classmethod
-    def _build_url(cls, url: str, **kwargs: dict):
+    def _build_url(cls, url: str, **kwargs: dict) -> str:
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
         query_string = urllib.parse.urlencode(kwargs)
         return f'{url}?{query_string}'
 
-    async def _get(self, url: str, **kwargs: dict):
+    async def _get(self, url: str, **kwargs: dict) -> Awaitable[Product]:
         url = self._build_url(url, **kwargs)
         header = {"User:Agent": random.choice(USER_AGENTS)}
         async with ClientSession() as session:
@@ -57,13 +59,13 @@ class BaseAPI:
                 res = await response.json(encoding='utf-8')
                 return [Product.create_from_json(x) for x in res]
 
-    async def _post(self, url: str, data: dict):
+    async def _post(self, url: str, data: dict) -> Awaitable[dict]:
         header = {"User:Agent": random.choice(USER_AGENTS)}
         async with ClientSession() as session:
             async with session.post(url=url, data=data, headers=header) as response:
                 return await response.json(encoding='utf8')
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'<{self.__class__.__name__}: {self.url}>'
 
 
@@ -84,9 +86,9 @@ class ProductAPI(BaseAPI):
         return self._retrieve(category, limit, False)
 
     def _retrieve(self,
-                 category: Optional[Union[List[str], str]] = None,
-                 limit: Optional[int] = None,
-                 sync: bool = False):
+                  category: Optional[Union[List[str], str]] = None,
+                  limit: Optional[int] = None,
+                  sync: bool = False):
         coroutine = self._get(
             url=self.url,
             **{'category': category, 'per_page': limit},

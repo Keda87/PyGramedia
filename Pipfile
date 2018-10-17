@@ -6,8 +6,9 @@ name = "pypi"
 [packages]
 aiohttp = "==3.4.4"
 coverage = "*"
-aioresponses = "*"
+aioresponses = "==0.4.2"
 coveralls = "*"
+python-dateutil = "==2.7.3"
 
 [dev-packages]
 ipython = "*"
